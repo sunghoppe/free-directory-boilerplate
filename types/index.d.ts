@@ -40,11 +40,6 @@ export type SiteConfig = {
   url: string;
   ogImage: string;
   mailSupport: string;
-  links: {
-    twitter: string;
-    github: string;
-    coffee: string;
-  };
   creator: string;
   subtitle: string;
 };
@@ -60,7 +55,7 @@ export type AuthConfig = {
 export type ProductConfig = {
   title: string;
   subtitle: string;
-  submitButton: string;
+  // submitButton: string;
   details: string;
   introduction: string;
   github: string;
@@ -76,7 +71,7 @@ export type ProductConfig = {
 export type ApplicationConfig = {
   title: string;
   subtitle: string;
-  submitButton: string;
+  // submitButton: string;
   gotoApp: string;
   website: string,
   date: string,
@@ -168,7 +163,7 @@ export type SubmitAppConfig = {
 export type AppListConfig = {
   title: string;
   subtitle: string;
-  submitAppButton: string;
+  // submitAppButton: string;
   emptyAppList: string;
   form: {
     title: string;

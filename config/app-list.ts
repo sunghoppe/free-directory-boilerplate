@@ -3,7 +3,7 @@ import { AppListConfig } from "@/types";
 const enAppListConfig: AppListConfig = {
     title: "Application List",
     subtitle: "List all your indie applications",
-    submitAppButton: "Submit Application",
+    // submitAppButton: "Submit Application",
     emptyAppList: "No application submitted yet",
     form: {
         title: "Please enter the name and link of the product.",
@@ -31,7 +31,7 @@ const enAppListConfig: AppListConfig = {
 const zhAppListConfig: AppListConfig = {
     title: "应用列表",
     subtitle: "您的独立应用列表",
-    submitAppButton: "提交应用",
+    // submitAppButton: "提交应用",
     emptyAppList: "暂无应用提交",
     form: {
         title: "请输入产品的名称和链接。",

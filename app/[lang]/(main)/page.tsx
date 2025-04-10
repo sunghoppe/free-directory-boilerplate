@@ -10,7 +10,7 @@ export default async function IndexPage({ params }: { params: { lang: string }; 
   const { lang } = params;
   
   // redirect to products page
-  return redirect(`/${lang}/group/new`);
+  return redirect(`/${lang}/group/ai-site`);
 
   // return (
   //   <>

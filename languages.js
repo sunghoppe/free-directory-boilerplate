@@ -1,6 +1,6 @@
 const languages = [
-  {id: 'en', title: 'English', isDefault: true},
-  {id: 'zh', title: '简体中文'},
+  {id: 'en', title: 'English'},
+  {id: 'zh', title: '简体中文', isDefault: true},
 ]
 
 const i18n = {

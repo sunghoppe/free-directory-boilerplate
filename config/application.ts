@@ -3,7 +3,7 @@ import { ApplicationConfig } from "types";
 const enConfig: ApplicationConfig = {
     title: 'Apps',
     subtitle: 'Explore the best indie hackers with their apps to help you get inspired',
-    submitButton: 'Submit Application',
+    // submitButton: 'Submit Application',
     gotoApp: 'Go to app',
     website: 'Website',
     date: 'Date',
@@ -15,7 +15,7 @@ const enConfig: ApplicationConfig = {
 const zhConfig: ApplicationConfig = {
     title: '应用',
     subtitle: '发掘最优秀的独立开发者和ta们的应用，助你从中获取灵感',
-    submitButton: '提交应用',
+    // submitButton: '提交应用',
     gotoApp: '前往应用',
     website: '网址',
     date: '日期',

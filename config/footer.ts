@@ -6,7 +6,7 @@ const enFooterConfig: SidebarNavItem[] = [
         items: [
             { title: "About Site", href: "/about" },
             { title: "Privacy Policy", href: "/privacy" },
-            { title: "Terms of Service", href: "/terms" },
+            // { title: "Terms of Service", href: "/terms" },
         ],
     },
     {
@@ -23,7 +23,7 @@ const enFooterConfig: SidebarNavItem[] = [
             // { title: "Sponsors", external: true, href: "https://buymeacoffee.com/javayhu" },
             { title: "Mkdirs", external: true, href: "https://mkdirs.com?ref=opensource" },
             { title: "IndieHub", external: true, href: "https://indiehub.best?ref=opensource" },
-            { title: "Free OG Generator", external: true, href: "https://og.indiehub.best?ref=opensource" },
+            // { title: "Free OG Generator", external: true, href: "https://og.indiehub.best?ref=opensource" },
         ],
     },
 ];
@@ -34,7 +34,7 @@ const zhFooterConfig: SidebarNavItem[] = [
         items: [
             { title: "关于本站", href: "/about-zh" },
             { title: "隐私政策", href: "/privacy" },
-            { title: "服务条款", href: "/terms" },
+            //{ title: "服务条款", href: "/terms" },
         ],
     },
     {
@@ -54,7 +54,7 @@ const zhFooterConfig: SidebarNavItem[] = [
             // { title: "更新日志", external: true, href: "https://indiehackers.canny.io/changelog" },
             { title: "Mkdirs", external: true, href: "https://mkdirs.com?ref=opensource" },
             { title: "IndieHub", external: true, href: "https://indiehub.best?ref=opensource" },
-            { title: "Free OG Generator", external: true, href: "https://og.indiehub.best?ref=opensource" },
+            // { title: "Free OG Generator", external: true, href: "https://og.indiehub.best?ref=opensource" },
         ],
     },
 ];
