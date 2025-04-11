@@ -16,17 +16,24 @@ export default function AppTypeList({ lang }: { lang: string }) {
 
 async function AppTypeListRSC({ lang }: { lang: string }) {
     const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('CategoryPage, language:', lang); // language: en
-    // console.log('CategoryPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
     
-    const [appTypeListQueryResult] = await Promise.all([
-        sanityFetch<AppTypeListQueryResult>({
+    try {
+        const appTypeListQueryResult = await sanityFetch<AppTypeListQueryResult>({
             query: appTypeListQuery,
             params: queryParams,
-        }),
-    ]);
+            next: { revalidate: 60 } // 添加缓存控制
+        });
 
-    return (
-        <AppTypeListClient lang={lang} categoryList={appTypeListQueryResult} />
-    );
+        if (!appTypeListQueryResult) {
+            console.warn('No app types found');
+            return null;
+        }
+
+        return (
+            <AppTypeListClient lang={lang} categoryList={appTypeListQueryResult} />
+        );
+    } catch (error) {
+        console.error('Error fetching app types:', error);
+        return null;
+    }
 }

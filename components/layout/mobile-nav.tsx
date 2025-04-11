@@ -37,7 +37,7 @@ export function MobileNav({ lang, items, children }: MobileNavProps) {
           {items?.map((item, index) => (
             <Link
               key={index}
-              href={item.disabled ? "#" : `/${lang}${item.href}`}
+              href={item.external ? item.href : (item.disabled ? "#" : `/${lang}${item.href}`)}
               prefetch={true}
               className={cn(
                 "flex w-full justify-center items-center p-2 transition-colors",

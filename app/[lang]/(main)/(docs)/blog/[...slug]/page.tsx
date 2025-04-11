@@ -14,10 +14,13 @@ import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 import { DashboardTableOfContents } from "@/components/shared/toc";
 import { getTableOfContents } from "@/lib/toc";
+import { i18n } from "@/languages.js";
+import { AllBlogConfigs } from "@/config/blog";
 
 interface PostPageProps {
   params: {
-    slug: string[]
+    lang: string;
+    slug: string[];
   }
 }
 
@@ -80,12 +83,17 @@ export async function generateMetadata({
 export async function generateStaticParams(): Promise<
   PostPageProps["params"][]
 > {
-  return allPosts.map((post) => ({
-    slug: post.slugAsParams.split("/"),
-  }))
+  return allPosts.flatMap((post) => 
+    i18n.languages.map((locale) => ({
+      lang: locale.id,
+      slug: post.slugAsParams.split("/"),
+    }))
+  );
 }
 
 export default async function PostPage({ params }: PostPageProps) {
+  const { lang } = params;
+  const blogConfig = AllBlogConfigs[lang];
   const post = await getPostFromParams(params);
   if (!post) {
     return notFound();
@@ -97,20 +105,18 @@ export default async function PostPage({ params }: PostPageProps) {
   )
 
   return (
-    // container relative max-w-4xl py-6 lg:py-10
     <article className="container relative max-w-4xl py-6 lg:py-10">
       <Link
-        href="/blog"
+        href={`/${lang}/blog`}
         className={cn(
           buttonVariants({ variant: "secondary" }),
           "absolute left-[-200px] top-14 hidden xl:inline-flex"
         )}
       >
         <Icons.chevronLeft className="mr-2 size-4" />
-        See all posts
+        {blogConfig.backToList}
       </Link>
       <div>
-
         <h1 className="mt-2 inline-block text-balance font-heading text-4xl leading-tight lg:text-5xl">
           {post.title}
         </h1>
@@ -149,43 +155,20 @@ export default async function PostPage({ params }: PostPageProps) {
               dateTime={post.date}
               className="block text-sm text-muted-foreground"
             >
-              {/* Published on  */}
               {formatDate(post.date)}
             </time>
           )}
-
         </div>
-
       </div>
-
-      {/* {post.image && (
-        <Image
-          src={post.image}
-          alt={post.title}
-          width={720}
-          height={405}
-          className="my-8 rounded-md border bg-muted transition-colors mx-auto"
-          priority
-        />
-      )} */}
 
       <Mdx code={post.body.code} />
       
-      {/* {post.date && (
-          <time
-            dateTime={post.date}
-            className="block text-sm text-muted-foreground"
-          >
-            Published on {formatDate(post.date)}
-          </time>
-        )} */}
-
       <hr className="mt-12" />
 
       <div className="flex justify-center py-6 lg:py-10">
-        <Link href="/blog" className={cn(buttonVariants({ variant: "secondary" }))}>
+        <Link href={`/${lang}/blog`} className={cn(buttonVariants({ variant: "secondary" }))}>
           <Icons.chevronLeft className="mr-2 size-4" />
-          See all posts
+          {blogConfig.backToList}
         </Link>
       </div>
 
@@ -194,7 +177,6 @@ export default async function PostPage({ params }: PostPageProps) {
           <DashboardTableOfContents toc={toc} />
         </div>
       </div>
-
     </article>
   )
 }

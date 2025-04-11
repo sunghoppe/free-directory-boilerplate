@@ -1,10 +1,8 @@
 import ApplicationGridCient from "@/components/app-grid-client";
-import { AllSiteConfigs } from "@/config/site";
 import { COMMON_PARAMS } from "@/lib/constants";
-import { ApplicationListByCategoryQueryResult, ApplicationListOfFeaturedQueryResult, ApplicationListOfRecentQueryResult, AppTypeQueryResult } from "@/sanity.types";
+import { ApplicationListByCategoryQueryResult, ApplicationListOfFeaturedQueryResult, ApplicationListOfRecentQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { applicationListByCategoryQuery, applicationListOfFeaturedQuery, applicationListOfRecentQuery, appTypeQuery } from "@/sanity/lib/queries";
-import { urlForImageWithSize } from "@/sanity/lib/utils";
+import { applicationListByCategoryQuery, applicationListOfFeaturedQuery, applicationListOfRecentQuery } from "@/sanity/lib/queries";
 import { Metadata } from "next";
 
 interface AppTypePageProps {
@@ -14,79 +12,63 @@ interface AppTypePageProps {
     }
 }
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
-export async function generateMetadata({
-    params,
-}: AppTypePageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: AppTypePageProps): Promise<Metadata> {
     const { lang, type } = params;
-    console.log('generateMetadata, lang:', lang, ', type:', type);
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('generateMetadata, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
-
-    const appTypeQueryResult = await sanityFetch<AppTypeQueryResult>({
-        query: appTypeQuery,
-        params: {
-            ...queryParams,
-            slug: type,
-        },
-    });
-    console.log('generateMetadata, appTypeQueryResult:', appTypeQueryResult);
-    if (!appTypeQueryResult) {
-        return {};
-    }
-
-    const siteConfig = AllSiteConfigs[lang];
-    const currentUrl = `${siteConfig.url}/${lang}/apptype/${type}`;
-    const canonicalUrl = `${siteConfig.url}/en/apptype/${type}`;
-
     return {
-        title: appTypeQueryResult.name,
-        description: siteConfig.description,
-        alternates: {
-            canonical: currentUrl,
-        },
-    }
+        title: `${type.charAt(0).toUpperCase() + type.slice(1)} Apps`,
+    };
 }
 
 export default async function AppListPage({ params }: AppTypePageProps) {
-    console.log('AppListPage, params:', params); // params: { lang: 'en', type: 'new' }
-
-    const { lang, type } = params;
+    const { lang, type: category } = params;
     const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('AppListPage, language:', lang); // language: en
-    // console.log('AppListPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const category = type;
-    console.log('AppListPage, category:', category);
+    try {
+        let applicationListQueryResult: ApplicationListByCategoryQueryResult | ApplicationListOfFeaturedQueryResult | ApplicationListOfRecentQueryResult;
+        
+        switch (category) {
+            case 'featured':
+                applicationListQueryResult = await sanityFetch<ApplicationListOfFeaturedQueryResult>({
+                    query: applicationListOfFeaturedQuery,
+                    params: queryParams,
+                    next: { revalidate: 60 }
+                });
+                break;
+            case 'new':
+                applicationListQueryResult = await sanityFetch<ApplicationListOfRecentQueryResult>({
+                    query: applicationListOfRecentQuery,
+                    params: {
+                        ...queryParams,
+                        limit: 24,
+                    },
+                    next: { revalidate: 60 }
+                });
+                break;
+            default:
+                applicationListQueryResult = await sanityFetch<ApplicationListByCategoryQueryResult>({
+                    query: applicationListByCategoryQuery,
+                    params: {
+                        ...queryParams,
+                        categorySlug: category
+                    },
+                    next: { revalidate: 60 }
+                });
+        }
 
-    let applicationListQueryResult: ApplicationListByCategoryQueryResult | ApplicationListOfFeaturedQueryResult | ApplicationListOfRecentQueryResult;
-    if (category === 'featured') {
-        applicationListQueryResult = await sanityFetch<ApplicationListOfFeaturedQueryResult>({
-            query: applicationListOfFeaturedQuery,
-            params: {
-                ...queryParams,
-            }
-        });
-    } else if (category === 'new') { // TODO(javayhu) may not be limited
-        applicationListQueryResult = await sanityFetch<ApplicationListOfRecentQueryResult>({
-            query: applicationListOfRecentQuery,
-            params: {
-                ...queryParams,
-                limit: 24,
-            }
-        });
-    } else {
-        applicationListQueryResult = await sanityFetch<ApplicationListByCategoryQueryResult>({
-            query: applicationListByCategoryQuery,
-            params: {
-                ...queryParams,
-                categorySlug: category 
-            },
-        });
+        if (!applicationListQueryResult) {
+            console.warn('No applications found for category:', category);
+            return <div className="text-center py-10">No applications found.</div>;
+        }
+
+        return (
+            <ApplicationGridCient 
+                lang={lang} 
+                itemList={applicationListQueryResult}
+                category={category} 
+            />
+        );
+    } catch (error) {
+        console.error('Error loading applications:', error);
+        return <div className="text-center py-10">Failed to load applications.</div>;
     }
-
-    return (
-        <ApplicationGridCient lang={lang} itemList={applicationListQueryResult}
-            category={category} />
-    );
 }

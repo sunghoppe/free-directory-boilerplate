@@ -6,10 +6,10 @@ export const docsConfig: DocsConfig = {
       title: "Products",
       href: "/product",
     },
-    // {
-    //   title: "Blog",
-    //   href: "/blog",
-    // },
+   {
+      title: "Blog",
+      href: "/blog",
+    },
     {
       title: "Guides",
       href: "/guides",

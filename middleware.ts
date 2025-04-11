@@ -124,7 +124,11 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
 
   // if restricted routes
   const isRestrictedRoute = restrictedRoutes.some((route) => {
-    return nextUrlPathNameWithoutLocale.startsWith(route);
+    if (route.endsWith('/*')) {
+      const baseRoute = route.slice(0, -2); // remove /* from end
+      return nextUrlPathNameWithoutLocale.startsWith(baseRoute);
+    }
+    return nextUrlPathNameWithoutLocale === route;
   });
   console.log('middleware, isRestrictedRoute:', isRestrictedRoute);  
   // env.MODE: undefined env.NODE_ENV: undefined
@@ -146,12 +150,13 @@ export default middleware((request: NextRequest & { auth: Session | null }): Res
 
   // if public routes
   const isPublicRoute = publicRoutes.some((route) => {
-    // console.log('middleware, route:', route, 'nextUrl:', nextUrlPathNameWithoutLocale);
     if (route === "/") {
       return nextUrlPathNameWithoutLocale === route;
-    } else {
-      return nextUrlPathNameWithoutLocale.startsWith(route);
+    } else if (route.endsWith('/*')) {
+      const baseRoute = route.slice(0, -2); // remove /* from end
+      return nextUrlPathNameWithoutLocale.startsWith(baseRoute);
     }
+    return nextUrlPathNameWithoutLocale === route;
   });
   console.log('middleware, isPublicRoute:', isPublicRoute);
 

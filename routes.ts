@@ -8,10 +8,17 @@
 export const publicRoutes = [
   "/",
   "/group",
+  "/group/*",
   "/product",
+  "/product/*",
   "/apptype",
+  "/apptype/*",
   "/app",
+  "/app/*",
   "/guides",
+  "/guides/*",
+  "/blog",
+  "/blog/*",
   "/about",
   "/about-zh",
   "/terms",
@@ -20,8 +27,9 @@ export const publicRoutes = [
 
 export const restrictedRoutes = [
   "/docs",
-  "/blog",
+  "/docs/*",
   "/saas",
+  "/saas/*",
 ];
 
 /**

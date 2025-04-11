@@ -1,5 +1,4 @@
 import { FeaturePageHeader } from "@/components/feature-page-header";
-import { ShareProductButton } from "@/components/forms/share-product-button";
 import GroupListClient from "@/components/group-list-client";
 import { AllProductConfigs } from "@/config/product";
 import { COMMON_PARAMS } from "@/lib/constants";
@@ -36,9 +35,7 @@ export default async function ProductListLayout({ params, children }: ProductLis
                 <FeaturePageHeader className="container"
                     heading={productConfig.title}
                     text={productConfig.subtitle}>
-                    <ShareProductButton lang={lang}>
-                        <span>{productConfig.submitButton}</span>
-                    </ShareProductButton>
+                    {/* Removed ShareProductButton with submitButton */}
                 </FeaturePageHeader>
             </div>
 
